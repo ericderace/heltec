@@ -43,12 +43,18 @@ void setup_wifi()
 {
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
-
+  Serial.print("WiFi Auto-reconnect: ");
+  Serial.println(WiFi.getAutoReconnect());
   // Wait for connection - bluck further execution until connected to wifi.
   while (WiFi.status() != WL_CONNECTED)
   {
-    delay(500);
-    Serial.print(".");
+    static unsigned long int timestamp = 0;
+    if (millis() - timestamp > 500)
+    {
+      Serial.print(".");
+      timestamp = millis();
+    }
+    
   }
 
   Serial.print("Connected to ");
